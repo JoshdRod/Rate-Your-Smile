@@ -55,10 +55,16 @@ def saveTopFiveSmiles(smileBuffer):
 
 """
 Takes in frame, finds smiles, adds them to 5 second buffer in order of smile intensity
-INPUT: image frame
+INPUT: raw jpeg image
 OUTPUTS: image frame and int intensity into smile buffer
 """
-def process_frame(frame):
+def process_frame(raw_image):
+    ## Convert raw image to a cv2 frame
+    # Convert to numpy array of bytes
+    image_array = np.fromstring(raw_image)
+    # Decode buffer to frame
+    frame = cv2.imdecode(image_array)
+
     greyscaleImage = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     faces = faceCascade.detectMultiScale(greyscaleImage, scaleFactor=1.1, minNeighbors=12, minSize=(30, 30))
 
@@ -76,6 +82,7 @@ def process_frame(frame):
             smile_rating = round(smile_intensity * 10, 2)
             smiling_image = frame[y:y + h, x:x + w]
             addToSmileBuffer(smiling_image, smile_rating)
+            print("Found face!")
             break
 
 

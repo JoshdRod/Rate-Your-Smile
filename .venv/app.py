@@ -20,8 +20,10 @@ def sent():
     if request.method == "POST":
         # Take payload, convert it to image we're expecting
         request_data = request.get_json()
+        raw_image = request_data["data"]
         print(request_data)
         # Run through backend
+        Backend.process_frame(raw_image)
         # For now, save images made in folder
     return "hello world"
 # main driver function
